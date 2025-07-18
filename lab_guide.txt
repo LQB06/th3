@@ -1,0 +1,50 @@
+
+# Guided Lab: Building a Full-Stack ToDo App (Node.js + MySQL)
+
+## Goal
+Build a ToDo app that allows users to:
+- View a list of tasks
+- Add a new task
+- Mark task as complete/incomplete
+- Delete a task
+
+## Tools Required
+- Node.js
+- MySQL Server
+- Web browser
+
+## Step-by-Step
+
+### 1. Setup MySQL
+Login to MySQL and run:
+```
+CREATE DATABASE todo_db;
+```
+
+### 2. Install Dependencies
+Run in your project folder:
+```
+npm init -y
+npm install express mysql2 cors body-parser
+```
+
+### 3. Add `server.js` code (provided)
+- This file connects to MySQL and creates API endpoints.
+
+### 4. Add `index.html` (frontend)
+- Open in browser after server runs.
+
+### 5. Run Server
+```
+node server.js
+```
+
+### 6. Test
+- Open browser and go to `index.html`
+- Try adding, marking, and deleting tasks.
+
+## Summary
+You just built a full stack app using:
+- HTML + JS (Client)
+- Node.js + Express (Server + API)
+- MySQL (Database)
