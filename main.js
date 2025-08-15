@@ -1,87 +1,74 @@
-const api = 'http://localhost:3000/api/todos';
+const apiURL = 'http://localhost:3000/api/todo';
 
-async function fetchTodos() {
+async function fetchTasks() {
+  const search = document.getElementById('searchInput').value;
+  const category = document.getElementById('filterCategory').value;
+  const priority = document.getElementById('filterPriority').value;
+
   try {
-    const res = await fetch(api);
+    const res = await fetch(`${apiURL}?search=${search}&category=${category}&priority=${priority}&sort=date`);
     const todos = await res.json();
+console.log('Fetched Todos:', todos);
     const list = document.getElementById('todoList');
     list.innerHTML = '';
-    todos.forEach(todo => {
+
+    if (!Array.isArray(todos)) return;
+
+    todos.forEach((todo, index) => {
       const li = document.createElement('li');
+      if (todo.status === 'Done') li.classList.add('done');
 
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.checked = todo.completed;
-      checkbox.onchange = () => toggleComplete(todo.id, checkbox.checked);
-
-      const span = document.createElement('span');
-      span.textContent = todo.task;
-      if (todo.completed) span.classList.add('done');
-
-      const edit = document.createElement('button');
-      edit.textContent = '✏️';
-      edit.onclick = () => showEditInput(todo);
-
-      const del = document.createElement('button');
-      del.textContent = '🗑️';
-      del.onclick = (e) => {
-        e.stopPropagation();
-        deleteTask(todo.id);
-      };
-
-      li.appendChild(checkbox);
-      li.appendChild(span);
-      li.appendChild(edit);
-      li.appendChild(del);
+      li.innerHTML = `
+        <span>${index + 1}. ${todo.task} [${todo.category}] (${todo.priority}) - Due: ${todo.due_date || 'N/A'}</span>
+        <div>
+          <button onclick="toggleStatus(${todo.id})">${todo.status}</button>
+          <button onclick="deleteTask(${todo.id})">Delete</button>
+        </div>
+      `;
       list.appendChild(li);
     });
+
   } catch (err) {
-    alert('Failed to fetch todos');
+    console.error(err);
   }
 }
 
 async function addTask() {
   const task = document.getElementById('taskInput').value;
-  if (!task.trim()) return alert("Task is empty!");
-  await fetch(api, {
+  const category = document.getElementById('categoryInput').value;
+  const priority = document.getElementById('priorityInput').value;
+  const due_date = document.getElementById('dueDateInput').value;
+
+  if (!task) return;
+
+  await fetch(apiURL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ task })
+    body: JSON.stringify({ task, category, priority, due_date, status: 'Pending' })
   });
+
+  showToast('Task added successfully!');
   document.getElementById('taskInput').value = '';
-  fetchTodos();
+  fetchTasks();
 }
 
-async function toggleComplete(id, completed) {
-  await fetch(`${api}/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ completed })
-  });
-  fetchTodos();
+async function toggleStatus(id) {
+  await fetch(`${apiURL}/${id}/toggle`, { method: 'PUT' });
+  fetchTasks();
 }
 
 async function deleteTask(id) {
-  await fetch(`${api}/${id}`, {
-    method: 'DELETE'
-  });
-  fetchTodos();
+  await fetch(`${apiURL}/${id}`, { method: 'DELETE' });
+  showToast('Task deleted!');
+  fetchTasks();
 }
 
-function showEditInput(todo) {
-  const newTask = prompt("Edit task:", todo.task);
-  if (newTask && newTask.trim() !== '') {
-    updateTaskContent(todo.id, newTask.trim());
-  }
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerText = message;
+  document.getElementById('toastContainer').appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
 
-async function updateTaskContent(id, task) {
-  await fetch(`${api}/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ task })
-  });
-  fetchTodos();
-}
-
-fetchTodos();
+fetchTasks();
