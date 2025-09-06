@@ -1,73 +1,94 @@
-body {
-  font-family: Arial, sans-serif;
-  max-width: 700px;
-  margin: auto;
-  background: #f4f4f9;
-  padding: 20px;
+
+:root{
+  --bg: #0f172a;
+  --card: #1e293b;
+  --muted: #9ca3af;
+  --text: #e5e7eb;
+  --primary: #22c55e;
+  --primary-600:#16a34a;
+  --accent: #60a5fa;
+  --danger: #ef4444;
+  --danger-600:#dc2626;
+  --ring: rgba(96,165,250,.35);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 12px;
 }
 
-h1 {
-  text-align: center;
-  color: #333;
+*{ box-sizing:border-box; }
+body{
+  margin:0; padding:24px;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
+h1{
+  margin:0 0 20px;
+  font-size:28px;
+  background: linear-gradient(90deg,#a5b4fc,#60a5fa,#34d399);
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent;
 }
 
-input, select, button {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+.card{
+  background: var(--card);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding:16px;
+  margin-bottom:20px;
 }
 
-button {
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
+input, select, button{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#0a0f1a; color:var(--text);
+  outline:none; font-size:14px;
 }
+input:focus, select:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+button{
+  background: linear-gradient(180deg,var(--primary),var(--primary-600));
+  border:none; cursor:pointer; font-weight:600;
+  color:#fff;
+}
+button:hover{ filter: brightness(1.05); }
 
-button:hover {
-  background-color: #45a049;
+.form-row{
+  display:flex; flex-wrap:wrap; gap:10px;
+  margin-bottom:14px;
 }
+.form-row > *{ flex:1; }
 
-ol {
-  list-style: none;
-  padding: 0;
+.task-list{
+  display:flex; flex-wrap:wrap; gap:14px;
 }
-
-li {
-  background: white;
-  padding: 10px;
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+.task{
+  flex:1 1 calc(50% - 14px);
+  background: var(--card);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding:14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
 }
-
-li.done span {
-  text-decoration: line-through;
-  color: gray;
+.task h3{ margin:0 0 6px; font-size:16px; }
+.meta{ font-size:13px; color:var(--muted); margin-bottom:10px; }
+.actions{ display:flex; gap:8px; }
+.actions button{
+  flex:1;
+  padding:8px 10px; font-size:13px;
+  border-radius:8px;
 }
-
-.toast {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  animation: fadeOut 3s forwards;
+.delete{ background: linear-gradient(180deg,var(--danger),var(--danger-600)); }
+.toggle{ background: linear-gradient(180deg,#3b82f6,#2563eb); }
+.dueDateInput{
+  padding:8px 10px; font-size:13px;
+  border-radius:8px; border:1px solid rgba(255,255,255,.12);
+  background:#0a0f1a; color:var(--text);
+  outline:none; flex:1;
 }
-
-@keyframes fadeOut {
-  0% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
+.done h3{ text-decoration:line-through; color:#9ca3af; }
+.done{ border-left:4px solid var(--primary); opacity:.85; }

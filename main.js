@@ -44,7 +44,7 @@ async function addTask() {
   await fetch(apiURL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ task, category, priority, due_date, status: 'Pending' })
+    body: JSON.stringify({ task, category, priority, due_date, status: '0' })
   });
 
   showToast('Task added successfully!');

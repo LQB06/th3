@@ -50,10 +50,16 @@ console.log('SQL Params:', params);
 
 app.post('/api/todo', (req, res) => {
   const { task, category, priority, due_date, status } = req.body;
-  db.query('INSERT INTO todos (task, category, priority, due_date, status) VALUES (?, ?, ?, ?, ?)',
-    [task, category, priority, due_date, status],
+  
+console.log('Inserted Todo:', { task, category, priority, status, due_date });
+  db.query('INSERT INTO todos (task, category, priority, status, due_date) VALUES (?, ?, ?, ?, ?)',
+    [task, category, priority, status, due_date],
     (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
+      if (err) 
+       { console.error('Insert Error:', err);
+        return res.status(500).json({ error: err.message });
+       }
+      
       res.json({ id: result.insertId });
     });
 });
